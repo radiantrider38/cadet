@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CADET LIFE </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent-blue: #3b82f6;
+            --accent-orange: #f97316;
+            --accent-glow: rgba(59, 130, 246, 0.5);
+            --text-light: #3c7fc2;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary), #1e1b4b);
+            color: var(--text-light);
+            min-height: 100vh;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, var(--accent-blue), var(--accent-orange));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Vertical line with glow effect */
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background: linear-gradient(to bottom, var(--accent-blue), var(--accent-orange));
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px var(--accent-glow);
+            z-index: 1;
+        }
+
+        .timeline-item {
+            padding: 25px 40px;
+            position: relative;
+            width: 50%;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeUp 1s forwards;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            animation-delay: 0.2s;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            animation-delay: 0.4s;
+        }
+
+        /* Crystal glass dots */
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            top: 35px;
+            border-radius: 50%;
+            z-index: 2;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 0 0 var(--accent-blue);
+        }
+
+        .timeline-item:nth-child(odd)::after {
+            right: -13px;
+        }
+
+        .timeline-item:nth-child(even)::after {
+            left: -13px;
+        }
+
+        .timeline-item:hover::after {
+            transform: scale(1.6);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--accent-orange);
+            box-shadow: 0 0 0 8px var(--accent-glow);
+        }
+
+        /* Glassmorphism content cards */
+        .timeline-content {
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(249, 115, 22, 0.1));
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: -1;
+        }
+
+        .timeline-item:hover .timeline-content {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .timeline-item:hover .timeline-content::before {
+            opacity: 1;
+        }
+
+        .year {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(to right, var(--accent-blue), var(--accent-orange));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transition: all 0.4s ease;
+            display: inline-block;
+        }
+
+        .timeline-item:hover .year {
+            transform: translateX(10px);
+            text-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .class-tag {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        .event-title {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .event-title i {
+            color: var(--accent-orange);
+            transition: transform 0.3s ease;
+        }
+
+        .timeline-item:hover .event-title i {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .personal-story {
+            line-height: 1.7;
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+            font-style: italic;
+            position: relative;
+            padding-left: 20px;
+            border-left: 3px solid var(--accent-orange);
+        }
+
+        .focus-area {
+            background: rgba(249, 115, 22, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-orange);
+            margin-top: 15px;
+        }
+
+        .focus-title {
+            font-weight: 600;
+            color: var(--accent-orange);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .focus-content {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Floating elements animation */
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-element {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUp {
+            from { 
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(20px, 30px) rotate(90deg);
+            }
+            50% {
+                transform: translate(0, 60px) rotate(180deg);
+            }
+            75% {
+                transform: translate(-20px, 30px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* Responsive design */
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 31px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                padding-left: 80px;
+                padding-right: 25px;
+            }
+
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+
+            .timeline-item::after {
+                left: 21px !important;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>MY JOURNEY AT RAJSHAHI CADET COLLEGE</h1>
+            <p class="subtitle">Six years that shaped who I am today - from a nervous newcomer to a confident leader</p>
+        </header>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="year">2019</div>
+                    <div class="class-tag">Class VII</div>
+                    <h3 class="event-title"><i class="fas fa-seedling"></i> Finding My Footing</h3>
+                    <p class="personal-story">I still remember how nervous I was that first day. Everything was so new and intimidating. But I quickly learned how to adapt to regimental life. The early morning parades, the physical training, the discipline - it was tough, but I mastered the basics and found my rhythm.</p>
+                    <div class="focus-area">
+                        <div class="focus-title"><i class="fas fa-bullseye"></i> What I focused on</div>
+                        <div class="focus-content">Learning to adapt, nailing parade basics, building physical fitness, and understanding what discipline really means</div>
+                    </div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="year">2020</div>
+                    <div class="class-tag">Class VIII</div>
+                    <h3 class="event-title"><i class="fas fa-chess-knight"></i> Stepping Up</h3>
+                    <p class="personal-story">This was when things started shifting for me. Suddenly I wasn't the new kid anymore - I was responsible for helping the junior cadets find their way. It felt strange at first, being looked up to, but I discovered I actually enjoyed mentoring while pushing my own academics forward.</p>
+                    <div class="focus-area">
+                        <div class="focus-title"><i class="fas fa-bullseye"></i> What I focused on</div>
+                        <div class="focus-content">Becoming a mentor, balancing leadership with my own studies, developing my skills beyond the basics</div>
+                    </div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="year">2021</div>
+                    <div class="class-tag">Class IX</div>
+                    <h3 class="event-title"><i class="fas fa-trophy"></i> Finding My Voice</h3>
+                    <p class="personal-story">I surprised myself this year. I never thought I'd be the debating type, but there I was, speaking in front of everyone. And running - I discovered I actually had stamina for long distances. The competitions pushed me in ways I didn't expect, and I loved every minute of it.</p>
+                    <div class="focus-area">
+                        <div class="focus-title"><i class="fas fa-bullseye"></i> What I focused on</div>
+                        <div class="focus-content">Debate competitions, public speaking, long run, and finding my competitive edge</div>
+                    </div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="year">2022</div>
+                    <div class="class-tag">Class X</div>
+                    <h3 class="event-title"><i class="fas fa-flask"></i> Exploring New Worlds</h3>
+                    <p class="personal-story">This year I got curious about everything. Science projects suddenly became fascinating, and I found myself spending hours in the lab. Then I discovered graphics design and started seeing the world differently. I was reading more too - finally understanding why people called books magical.</p>
+                    <div class="focus-area">
+                        <div class="focus-title"><i class="fas fa-bullseye"></i> What I focused on</div>
+                        <div class="focus-content">Science experiments, learning graphics design, developing my creative side, and falling in love with reading</div>
+                    </div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="year">2023</div>
+                    <div class="class-tag">Class XI</div>
+                    <h3 class="event-title"><i class="fas fa-users"></i> The Bonds That Matter</h3>
+                    <p class="personal-story">I'll be honest - this year was less about achievements and more about people. The friendships I'd been building over the years became my anchor. We laughed so much, supported each other through tough times, and created memories I know I'll carry forever. These were my people.</p>
+                    <div class="focus-area">
+                        <div class="focus-title"><i class="fas fa-bullseye"></i> What I focused on</div>
+                        <div class="focus-content">Deepening friendships, creating lasting memories, being there for my friends, and enjoying the journey</div>
+                    </div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="year">2024</div>
+                    <div class="class-tag">Class XII</div>
+                    <h3 class="event-title"><i class="fas fa-graduation-cap"></i> Coming Full Circle</h3>
+                    <p class="personal-story">Being made House Prefect was one of my proudest moments. All those years of learning culminated in this responsibility. I had to manage my time perfectly - leading, studying, and preparing to say goodbye. The comeback I made in my studies showed me how much I'd grown. I was ready to move on, but I'd never forget this place.</p>
+                    <div class="focus-area">
+                        <div class="focus-title"><i class="fas fa-bullseye"></i> What I focused on</div>
+                        <div class="focus-content">Leadership as House Prefect, time management, academic excellence, and preparing for the next chapter</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p> MY JOURNEY AT RAJSHAHI CADET COLLEGE &copy; 2023 | Six years that made me who I am</p>
+    </footer>
+
+    <script>
+        // Enhanced scroll animation for timeline items
+        document.addEventListener('DOMContentLoaded', function() {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+            
+            timelineItems.forEach(item => {
+                item.style.animationPlayState = 'paused';
+                observer.observe(item);
+            });
+            
+            // Add random floating elements
+            const floatingContainer = document.querySelector('.floating-elements');
+            for (let i = 0; i < 5; i++) {
+                const element = document.createElement('div');
+                element.classList.add('floating-element');
+                element.style.left = `${Math.random() * 100}%`;
+                element.style.top = `${Math.random() * 100}%`;
+                element.style.width = `${30 + Math.random() * 70}px`;
+                element.style.height = element.style.width;
+                element.style.animationDuration = `${15 + Math.random() * 20}s`;
+                element.style.animationDelay = `${Math.random() * 10}s`;
+                element.style.background = `rgba(255, 255, 255, ${0.02 + Math.random() * 0.06})`;
+                floatingContainer.appendChild(element);
+            }
+        });
+    </script>
+</body>
+</html>
